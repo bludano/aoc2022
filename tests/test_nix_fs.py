@@ -1,6 +1,17 @@
 import pytest
+import day7.nix_fs
 from day7 import nix_fs
 import textwrap
+import logging
+
+@pytest.fixture(autouse=True)
+def logger():
+    #global logger
+    logger = logging.Logger(__name__)
+    h = logging.StreamHandler()
+    logger.addHandler(h)
+    logger.setLevel(logging.DEBUG)
+    day7.nix_fs.logger = logger
 
 @pytest.fixture
 def sample():
