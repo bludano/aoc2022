@@ -6,7 +6,6 @@ import logging
 
 @pytest.fixture(autouse=True)
 def logger():
-    #global logger
     logger = logging.Logger(__name__)
     h = logging.StreamHandler()
     logger.addHandler(h)
@@ -55,14 +54,9 @@ def sample_lines(sample):
 def test_get_FSDir_from_shell_transcript(sample_lines):
     fsd = nix_fs.get_FSDir_from_shell_transcript(sample_lines)
 
-def test_FSDir_subdir_sizes(sample_lines):
-    fsd = nix_fs.get_FSDir_from_shell_transcript(sample_lines)
-    all_sizes = fsd.subdir_sizes()
-    assert all_sizes == {'/a/e': 584, '/a': 94853, '/d': 24933642, '/': 48381749}
-
 def test_size_of_filtered_dirs(sample_lines):
     fsd = nix_fs.get_FSDir_from_shell_transcript(sample_lines)
-    tot_filtered = nix_fs.size_of_filtered_dirs(fsd.subdir_sizes())
+    tot_filtered = nix_fs.size_of_filtered_dirs(list(fsd))
     assert tot_filtered == 95437
 
 def test_main(sample_file, monkeypatch, capsys):
