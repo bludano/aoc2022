@@ -128,6 +128,7 @@ def get_FSDir_from_shell_transcript(lines: Iterable[str]) -> FSDirT:
 
 def size_of_filtered_dirs(dirs: Dict[str, int]) -> int:
     global logger
+    dirs = list(dirs)
     dirs_ = dict()
     logger.debug('f: size_of_filtered_dirs: getting directories meeting filter requirement')
     for uuid, fsd in dirs:
@@ -139,6 +140,35 @@ def size_of_filtered_dirs(dirs: Dict[str, int]) -> int:
     size = sum(dirs_.values())
     logger.debug(f"size={size}")
     return size
+
+def directory_to_sacrifice(
+        root_fsdir: FSDirT,
+        TOTAL_SPACE_AVAILABLE_AFTER_RM_RF_ROOT: int = 70000000,
+        UNUSED_SPACE_REQUIRED: int = 30000000
+    ) -> FSDirT:
+    global logger
+    used_space = root_fsdir.size
+    unused_space = TOTAL_SPACE_AVAILABLE_AFTER_RM_RF_ROOT - used_space
+    additional_space_required = UNUSED_SPACE_REQUIRED - unused_space
+
+    sacrifice_dir: Optional[FSDirT] = None
+    size_sacrifice_dir: Optional[int] = None
+    dirs = list(root_fsdir)
+    for uuid, fsd in dirs:
+        logger.debug(f"f: directory_to_sacrifice: uuid={uuid}, fsd={fsd!r}")
+        this_fsd_size = fsd.size
+        if this_fsd_size < additional_space_required:
+            logger.debug(f"f: directory_to_sacrifice: too small")
+            continue
+        if size_sacrifice_dir is None or this_fsd_size < size_sacrifice_dir:
+            logger.debug(f"f: directory_to_sacrifice: new sacrifice dir identified: uuid={uuid}, fsd={fsd!r}")
+            size_sacrifice_dir = this_fsd_size
+            sacrifice_dir = fsd
+        else:
+            logger.debug(f"f: directory_to_sacrifice: default branch - do nothing")
+    if sacrifice_dir is None:
+        raise RuntimeError(f"No directory available which can meet space requirements")
+    return sacrifice_dir
 
 def main():
     global logger
@@ -157,8 +187,12 @@ def main():
     fsd = get_FSDir_from_shell_transcript(lines)
 
     # part 1
-    tot = size_of_filtered_dirs(list(fsd))
+    tot = size_of_filtered_dirs(fsd)
     print(f"Total size of dirs of size <=100000: {tot}")
+
+    # part 2 - size of sacrifice directory
+    sacrifice_dir_size = directory_to_sacrifice(fsd).size
+    print(f"Total size of sacrifice directory: {sacrifice_dir_size}")
 
 if __name__ == '__main__':
     main()

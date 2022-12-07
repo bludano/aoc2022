@@ -59,8 +59,13 @@ def test_size_of_filtered_dirs(sample_lines):
     tot_filtered = nix_fs.size_of_filtered_dirs(list(fsd))
     assert tot_filtered == 95437
 
+def test_directory_to_sacrifice(sample_lines):
+    fsd = nix_fs.get_FSDir_from_shell_transcript(sample_lines)
+    sacrifice_dir = nix_fs.directory_to_sacrifice(fsd)
+    assert sacrifice_dir._name == 'd'
+
 def test_main(sample_file, monkeypatch, capsys):
     monkeypatch.setenv('INPUT_FILE', str(sample_file))
     nix_fs.main()
     written_to_output = capsys.readouterr().out
-    assert written_to_output == 'Total size of dirs of size <=100000: 95437\n'
+    assert written_to_output == 'Total size of dirs of size <=100000: 95437\nTotal size of sacrifice directory: 24933642\n'
