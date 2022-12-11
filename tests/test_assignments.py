@@ -1,6 +1,6 @@
 import pytest
 import textwrap
-from day4 import assignments
+from day04 import assignments
 import pathlib
 
 @pytest.fixture

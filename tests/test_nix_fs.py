@@ -1,6 +1,6 @@
 import pytest
-import day7.nix_fs
-from day7 import nix_fs
+import day07.nix_fs
+from day07 import nix_fs
 import textwrap
 import logging
 
@@ -10,7 +10,7 @@ def logger():
     h = logging.StreamHandler()
     logger.addHandler(h)
     logger.setLevel(logging.DEBUG)
-    day7.nix_fs.logger = logger
+    day07.nix_fs.logger = logger
 
 @pytest.fixture
 def sample():

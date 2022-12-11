@@ -1,6 +1,6 @@
 import pytest
 import textwrap
-from day5 import rearrangement
+from day05 import rearrangement
 
 @pytest.fixture
 def sample():

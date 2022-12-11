@@ -1,6 +1,6 @@
 import pytest
 import textwrap
-from day3 import rucksack_supplies
+from day03 import rucksack_supplies
 
 @pytest.fixture
 def sample():

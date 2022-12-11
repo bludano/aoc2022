@@ -1,5 +1,5 @@
 import pytest
-from day6 import marker
+from day06 import marker
 
 _test_cases = (
     ("bvwbjplbgvbhsrlpgdmjqwftvncz", 5, 23),

@@ -1,6 +1,6 @@
 import pytest
 import textwrap
-from day9 import rope_bridge
+from day09 import rope_bridge
 
 def sample():
     return textwrap.dedent("""\

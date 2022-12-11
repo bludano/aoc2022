@@ -1,5 +1,5 @@
 import pytest
-from day2 import tournament
+from day02 import tournament
 
 sample_final_score = (
     ('A', 'Y', 8),
